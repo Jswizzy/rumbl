@@ -25,6 +25,8 @@ defmodule Rumbl.ChannelCase do
       import Ecto.Changeset
       import Ecto.Query
 
+      import Rumbl.Router.Helpers
+      import Rumbl.TestHelpers
 
       # The default endpoint for testing
       @endpoint Rumbl.Endpoint
@@ -32,12 +34,10 @@ defmodule Rumbl.ChannelCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Rumbl.Repo)
-
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Rumbl.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.restart_test_transaction(Rumbl.Repo, [])
     end
 
-    :ok
+    {:ok, conn: Phoenix.ConnTest.conn()}
   end
 end

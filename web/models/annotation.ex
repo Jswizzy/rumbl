@@ -1,13 +1,16 @@
-defmodule Rumbl.Category do
+defmodule Rumbl.Annotation do
   use Rumbl.Web, :model
 
-  schema "categories" do
-    field :name, :string
+  schema "annotations" do
+    field :body, :string
+    field :at, :integer
+    belongs_to :user, Rumbl.User
+    belongs_to :video, Rumbl.Video
 
     timestamps
   end
 
-  @required_fields ~w(name)
+  @required_fields ~w(body at)
   @optional_fields ~w()
 
   @doc """
@@ -19,13 +22,5 @@ defmodule Rumbl.Category do
   def changeset(model, params \\ :empty) do
     model
     |> cast(params, @required_fields, @optional_fields)
-  end
-
-  def alphabetical(query) do
-    from c in query, order_by: c.name
-  end
-
-  def names_and_ids(query) do
-    from c in query, select: {c.name, c.id}
   end
 end
